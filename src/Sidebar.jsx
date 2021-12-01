@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
+import { MainContext } from "./contexts/MainContext";
 import style from "./style.module.css";
 
 const Sidebar = () => {
+  const { showMenu } = useContext(MainContext);
+
   return (
-    <div className={`${style.sidebar_section} bg-secondary`}>
+    <div
+      className={`${style.sidebar_section} bg-secondary`}
+      style={showMenu ? { right: 0 } : {}}
+    >
       <ul className={`${style.sidebar_list} m-0 p-0`}>
         <li className={style.sidebar_avatar}>
           <img src="/assets/images/user2.jpg" alt="" />
