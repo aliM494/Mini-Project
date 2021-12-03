@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import { MainContext } from "./contexts/MainContext";
 import style from "./style.module.css";
 
@@ -15,16 +16,16 @@ const Sidebar = () => {
           <img src="/assets/images/user2.jpg" alt="" />
         </li>
         <li>
-          <a href="#">کاربران</a>
+          <Link to="/">کاربران</Link>
         </li>
         <li>
-          <a href="#">پست ها</a>
+          <Link to="/posts">پست ها</Link>
         </li>
         <li>
-          <a href="#">گالری</a>
+          <Link to="/gallery">گالری</Link>
         </li>
         <li>
-          <a href="#">کارها</a>
+          <Link to="/todos">کارها</Link>
         </li>
       </ul>
     </div>
