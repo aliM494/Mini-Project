@@ -1,10 +1,10 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import style from "../style.module.css";
 
 const AddUser = () => {
   const { userId } = useParams();
-
+  const navigate = useNavigate();
   return (
     <div className={`${style.item_content} mt-5 p-4 container-fluid container`}>
       <h4 className="text-center text-primary">
@@ -53,7 +53,11 @@ const AddUser = () => {
           </div>
 
           <div className="col-12 text-start">
-            <button type="button" className="btn btn-danger ms-2">
+            <button
+              type="button"
+              className="btn btn-danger ms-2"
+              onClick={() => navigate(-1)}
+            >
               بازگشت
             </button>
             <button type="submit" className="btn btn-primary">

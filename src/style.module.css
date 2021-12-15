@@ -76,4 +76,9 @@ th {
   }
 }
 
+.active_nav li {
+  background: #e4e4e4;
+  color: black;
+}
+
 /* users content ----------- */

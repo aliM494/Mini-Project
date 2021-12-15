@@ -1,8 +1,29 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import style from "../style.module.css";
+import swal from "sweetalert";
 
 const Users = () => {
+  const navigate = useNavigate();
+
+  const handleDelete = (itemId) => {
+    swal({
+      title: "حذف کاربر",
+      text: `آیا از حذف ${itemId} اطمینان دارید ؟؟`,
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        swal("کاربری با موفقیت حذف شد !", {
+          icon: "success",
+        });
+      } else {
+        swal("عملیات لغو شد");
+      }
+    });
+  };
+
   return (
     <div className={`${style.item_content} mt-5 p-4 container-fluid`}>
       <h4 className="text-center">مدیریت کاربران</h4>
@@ -39,10 +60,15 @@ const Users = () => {
             <td>qasemB</td>
             <td>mahdicmptr@gmail.com</td>
             <td>
-              <Link to="/user/add/2">
-                <i className="fas fa-edit text-warning mx-2 pointer"></i>
-              </Link>
-              <i className="fas fa-trash text-danger mx-2 pointer"></i>
+              <i
+                className="fas fa-edit text-warning mx-2 pointer"
+                onClick={() => navigate("/user/add/2")}
+              ></i>
+
+              <i
+                className="fas fa-trash text-danger mx-2 pointer"
+                onClick={() => handleDelete(1)}
+              ></i>
             </td>
           </tr>
         </tbody>

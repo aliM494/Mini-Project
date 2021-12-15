@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { MainContext } from "./contexts/MainContext";
 import style from "./style.module.css";
 
@@ -15,18 +15,34 @@ const Sidebar = () => {
         <li className={style.sidebar_avatar}>
           <img src="/assets/images/user2.jpg" alt="" />
         </li>
-        <li>
-          <Link to="/user">کاربران</Link>
-        </li>
-        <li>
-          <Link to="/post">پست ها</Link>
-        </li>
-        <li>
-          <Link to="/gallery">گالری</Link>
-        </li>
-        <li>
-          <Link to="/todos">کارها</Link>
-        </li>
+
+        <NavLink
+          className={({ isActive }) => (isActive ? "active_nav" : "")}
+          to="/user"
+        >
+          <li>کاربران</li>
+        </NavLink>
+
+        <NavLink
+          className={({ isActive }) => (isActive ? "active_nav" : "")}
+          to="/post"
+        >
+          <li>پست ها</li>
+        </NavLink>
+
+        <NavLink
+          className={({ isActive }) => (isActive ? "active_nav" : "")}
+          to="/gallery"
+        >
+          <li>گالری</li>
+        </NavLink>
+
+        <NavLink
+          className={({ isActive }) => (isActive ? "active_nav" : "")}
+          to="/todos"
+        >
+          <li>کارها</li>
+        </NavLink>
       </ul>
     </div>
   );
