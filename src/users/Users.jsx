@@ -1,23 +1,47 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import style from "../style.module.css";
 import swal from "sweetalert";
+import axios from "axios";
 
 const Users = () => {
   const navigate = useNavigate();
+  const [users, setUsers] = useState([]);
 
-  const handleDelete = (itemId) => {
+  useEffect(() => {
+    axios
+      .get("https://jsonplaceholder.typicode.com/users")
+      .then((res) => {
+        setUsers(res.data);
+      })
+      .catch((err) => {});
+  }, []);
+
+  const handleDelete = (itemId, username) => {
     swal({
       title: "حذف کاربر",
-      text: `آیا از حذف ${itemId} اطمینان دارید ؟؟`,
+      text: `آیا از حذف ${username} اطمینان دارید ؟؟`,
       icon: "warning",
       buttons: true,
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        swal("کاربری با موفقیت حذف شد !", {
-          icon: "success",
-        });
+        axios
+          .delete(`https://jsonplaceholder.typicode.com/users/${itemId}`)
+          .then((res) => {
+            if (res.status === 200) {
+              const newusers = users.filter((u) => u.id !== itemId);
+              setUsers(newusers);
+
+              swal(`${username} با موفقیت حذف شد `, {
+                icon: "success",
+              });
+            } else {
+              swal("عملیات با خطا مواجه شد", {
+                icon: "error",
+              });
+            }
+          });
       } else {
         swal("عملیات لغو شد");
       }
@@ -43,36 +67,43 @@ const Users = () => {
           </Link>
         </div>
       </div>
-      <table className="table bg-light shadow">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>نام</th>
-            <th>نام کاربری</th>
-            <th>ایمیل</th>
-            <th>عملیات</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>qasem</td>
-            <td>qasemB</td>
-            <td>mahdicmptr@gmail.com</td>
-            <td>
-              <i
-                className="fas fa-edit text-warning mx-2 pointer"
-                onClick={() => navigate("/user/add/2")}
-              ></i>
 
-              <i
-                className="fas fa-trash text-danger mx-2 pointer"
-                onClick={() => handleDelete(1)}
-              ></i>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      {users.length ? (
+        <table className="table bg-light shadow">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>نام</th>
+              <th>نام کاربری</th>
+              <th>ایمیل</th>
+              <th>عملیات</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>{user.id}</td>
+                <td>{user.name}</td>
+                <td>{user.username}</td>
+                <td>{user.email}</td>
+                <td>
+                  <i
+                    className="fas fa-edit text-warning mx-2 pointer"
+                    onClick={() => navigate("/user/add", { state: user.id })}
+                  ></i>
+
+                  <i
+                    className="fas fa-trash text-danger mx-2 pointer"
+                    onClick={() => handleDelete(user.id, user.username)}
+                  ></i>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <h4 className="text-center text-info">لطفا صبر کنید ......</h4>
+      )}
     </div>
   );
 };
