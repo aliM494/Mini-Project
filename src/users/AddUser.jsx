@@ -1,21 +1,33 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import style from "../style.module.css";
 
-const AddUser = () => {
+const Adddata = () => {
   const navigate = useNavigate();
   const params = useLocation();
-  const [user, setUser] = useState({});
 
-  useEffect(() => {
-    axios
-      .get(`https://jsonplaceholder.typicode.com/users/${params.state}`)
-      .then((res) => {
-        setUser(res.data);
-        console.log(user);
-      });
-  }, []);
+
+  const [data, setData] = useState({
+    name: "",
+    username: "",
+    email: "",
+    address: {
+      street: "",
+      suite: "",
+      city: "",
+      zipcode: ""
+    }
+
+  });
+
+
+  const handlAddUser=(e)=>{
+    e.preventDefault();
+    axios.post("https://jsonplaceholder.typicode.com/users",data).then(res=>{
+      console.log(res.status);
+    })
+  }
 
   return (
     <div className={`${style.item_content} mt-5 p-4 container-fluid container`}>
@@ -23,18 +35,18 @@ const AddUser = () => {
         {params.state ? "ویرایش کاربر" : "افزودن کاربر"}
       </h4>
       <div className="row justify-content-center mt-5 ">
-        <form className="col-12 col-md-6 bg-light rounded shadow-lg p-3">
+        <form onSubmit={handlAddUser} className="col-12 col-md-6 bg-light rounded shadow-lg p-3">
           <div className="mb-3">
             <label className="form-label">نام و نام خانوادگی</label>
-            <input type="text" className="form-control" value={user.name} />
+            <input type="text" className="form-control" value={data.name} onChange={(e)=> setData({...data,name:e.target.value})}/>
           </div>
           <div className="mb-3">
             <label className="form-label">نام کاربری</label>
-            <input type="text" className="form-control" value={user.username} />
+            <input type="text" className="form-control" value={data.username}   onChange={(e)=> setData({...data,username:e.target.value})}/>
           </div>
           <div className="mb-3">
             <label className="form-label">ایمیل</label>
-            <input type="email" className="form-control" value={user.email} />
+            <input type="email" className="form-control" value={data.email}  onChange={(e)=> setData({...data,email:e.target.value})}/>
           </div>
           <div className="mb-3 row">
             <label className="form-label">آدرس</label>
@@ -43,7 +55,8 @@ const AddUser = () => {
                 type="text"
                 className="form-control"
                 placeholder="شهر"
-                value=""
+                value={data.address.city} 
+                onChange={(e)=> setData({...data,address:{...data.address,city:e.target.value}})}
               />
             </div>
             <div className="col-6 my-1">
@@ -51,7 +64,8 @@ const AddUser = () => {
                 type="text"
                 className="form-control"
                 placeholder="خیابان"
-                value=""
+                value={data.address.street} 
+                onChange={(e)=> setData({...data,address:{...data.address,street:e.target.value}})}
               />
             </div>
             <div className="col-6 my-1">
@@ -59,7 +73,8 @@ const AddUser = () => {
                 type="text"
                 className="form-control"
                 placeholder="ادامه آدرس"
-                value=""
+                value={data.address.suite} 
+                onChange={(e)=> setData({...data,address:{...data.address,suite:e.target.value}})}
               />
             </div>
             <div className="col-6 my-1">
@@ -67,7 +82,8 @@ const AddUser = () => {
                 type="text"
                 className="form-control"
                 placeholder="کد پستی"
-                value=""
+                value={data.address.zipcode}
+                 onChange={(e)=> setData({...data,address:{...data.address,zipcode:e.target.value}})}
               />
             </div>
           </div>
@@ -76,7 +92,7 @@ const AddUser = () => {
             <button
               type="button"
               className="btn btn-danger ms-2"
-              onClick={() => navigate(-1)}
+              onClick={()=> navigate("/")}
             >
               بازگشت
             </button>
@@ -91,4 +107,4 @@ const AddUser = () => {
   );
 };
 
-export default AddUser;
+export default Adddata;
