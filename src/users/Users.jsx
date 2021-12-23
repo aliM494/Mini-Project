@@ -7,12 +7,14 @@ import axios from "axios";
 const Users = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
+  const [mainUsers, setMainUsers] = useState([]);
 
   useEffect(() => {
     axios
       .get("https://jsonplaceholder.typicode.com/users")
       .then((res) => {
         setUsers(res.data);
+        setMainUsers(res.data)
       })
       .catch((err) => {});
   }, []);
@@ -48,6 +50,11 @@ const Users = () => {
     });
   };
 
+  const handleSearch=(e)=>{
+    console.log(e.target.value);
+    setUsers(mainUsers.filter(u=>u.name.includes(e.target.value)||u.id == e.target.value))
+  }
+
   return (
     <div className={`${style.item_content} mt-5 p-4 container-fluid`}>
       <h4 className="text-center">مدیریت کاربران</h4>
@@ -57,6 +64,7 @@ const Users = () => {
             type="text"
             className="form-control shadow"
             placeholder="جستجو"
+            onChange={handleSearch}
           />
         </div>
         <div className="col-2 text-start px-0">
@@ -89,7 +97,7 @@ const Users = () => {
                 <td>
                   <i
                     className="fas fa-edit text-warning mx-2 pointer"
-                    onClick={() => navigate("/user/add", { state: user.id })}
+                    onClick={() => navigate(`/user/add/${user.id}`)}
                   ></i>
 
                   <i

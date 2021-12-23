@@ -1,11 +1,12 @@
 import axios from "axios";
-import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {  useNavigate, useParams } from "react-router-dom";
+import swal from "sweetalert";
 import style from "../style.module.css";
 
 const Adddata = () => {
   const navigate = useNavigate();
-  const params = useLocation();
+  const {userId} = useParams();
 
 
   const [data, setData] = useState({
@@ -24,15 +25,44 @@ const Adddata = () => {
 
   const handlAddUser=(e)=>{
     e.preventDefault();
-    axios.post("https://jsonplaceholder.typicode.com/users",data).then(res=>{
-      console.log(res.status);
+    
+    if(userId){
+      axios.put(`https://jsonplaceholder.typicode.com/users/${userId}`,data).then(res=>{
+        swal(`${res.data.name} با موفقیت ویرایش شد `, {
+          icon: "success",
+        });
     })
+    }else{
+      axios.post("https://jsonplaceholder.typicode.com/users",data).then(res=>{
+        swal(`${res.data.name} با موفقیت ایجاد شد `, {
+          icon: "success",
+        });
+    })
+    }
   }
+
+  useEffect(() => {
+    if(userId){
+      axios.get(`https://jsonplaceholder.typicode.com/users/${userId}`).then(res=>{
+        setData({
+          name: res.data.name,
+          username: res.data.username,
+          email: res.data.email,
+          address: {
+                street: res.data.address.street,
+                suite: res.data.address.suite,
+                city: res.data.address.city,
+                zipcode: res.data.address.zipcode
+    }
+        })
+      })
+    }
+  }, [])
 
   return (
     <div className={`${style.item_content} mt-5 p-4 container-fluid container`}>
       <h4 className="text-center text-primary">
-        {params.state ? "ویرایش کاربر" : "افزودن کاربر"}
+        {userId ? "ویرایش کاربر" : "افزودن کاربر"}
       </h4>
       <div className="row justify-content-center mt-5 ">
         <form onSubmit={handlAddUser} className="col-12 col-md-6 bg-light rounded shadow-lg p-3">
@@ -97,7 +127,7 @@ const Adddata = () => {
               بازگشت
             </button>
             <button type="submit" className="btn btn-primary">
-              {params.state ? "ویرایش " : "افزودن "}
+              {userId ? "ویرایش " : "افزودن "}
             </button>
           </div>
         </form>
