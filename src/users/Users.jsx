@@ -52,7 +52,7 @@ const Users = () => {
 
   const handleSearch=(e)=>{
     console.log(e.target.value);
-    setUsers(mainUsers.filter(u=>u.name.includes(e.target.value)||u.id == e.target.value))
+    setUsers(mainUsers.filter(u=>u.name.includes(e.target.value)||u.id === e.target.value))
   }
 
   return (
