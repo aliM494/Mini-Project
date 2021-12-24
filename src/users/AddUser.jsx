@@ -39,7 +39,7 @@ const Adddata = () => {
         setData(res);
       });
     }
-  }, []);
+  });
 
   return (
     <div className={`${style.item_content} mt-5 p-4 container-fluid container`}>
