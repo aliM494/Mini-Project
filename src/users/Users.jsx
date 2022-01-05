@@ -1,59 +1,61 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import style from "../style.module.css";
-import swal from "sweetalert";
 import axios from "axios";
+import withAlert from "../HOC/withAlert";
 
-const Users = () => {
+const Users = (props) => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [mainUsers, setMainUsers] = useState([]);
+
+  const { Alert } = props;
 
   useEffect(() => {
     axios
       .get("https://jsonplaceholder.typicode.com/users")
       .then((res) => {
         setUsers(res.data);
-        setMainUsers(res.data)
+        setMainUsers(res.data);
       })
       .catch((err) => {});
   }, []);
 
-  const handleDelete = (itemId, username) => {
-    swal({
-      title: "حذف کاربر",
-      text: `آیا از حذف ${username} اطمینان دارید ؟؟`,
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then((willDelete) => {
-      if (willDelete) {
-        axios
-          .delete(`https://jsonplaceholder.typicode.com/users/${itemId}`)
-          .then((res) => {
-            if (res.status === 200) {
-              const newusers = users.filter((u) => u.id !== itemId);
-              setUsers(newusers);
+  const handleDelete = async (itemId, username) => {
+    if (
+      await Alert(
+        "شما اطمینان دارید ؟",
+        "warning",
+        `آیا از حذف ${username} اطمینان دارید ؟`,
+        ["خیر", "بله"],
+        true
+      )
+    ) {
+      axios
+        .delete(`https://jsonplaceholder.typicode.com/users/${itemId}`)
+        .then((res) => {
+          if (res.status === 200) {
+            const newusers = users.filter((u) => u.id !== itemId);
+            setUsers(newusers);
 
-              swal(`${username} با موفقیت حذف شد `, {
-                icon: "success",
-              });
-            } else {
-              swal("عملیات با خطا مواجه شد", {
-                icon: "error",
-              });
-            }
-          });
-      } else {
-        swal("عملیات لغو شد");
-      }
-    });
+            Alert("عملیات با موفقیت انجام شد", "success", "");
+          } else {
+            Alert("عملیات با خطا مواجه شد", "error");
+          }
+        });
+    } else {
+      Alert("عملیات لغو شد");
+    }
   };
 
-  const handleSearch=(e)=>{
+  const handleSearch = (e) => {
     console.log(e.target.value);
-    setUsers(mainUsers.filter(u=>u.name.includes(e.target.value)||u.id === e.target.value))
-  }
+    setUsers(
+      mainUsers.filter(
+        (u) => u.name.includes(e.target.value) || u.id === e.target.value
+      )
+    );
+  };
 
   return (
     <div className={`${style.item_content} mt-5 p-4 container-fluid`}>
@@ -116,4 +118,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default withAlert(Users);
