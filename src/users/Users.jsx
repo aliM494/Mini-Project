@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import style from "../style.module.css";
-import axios from "axios";
 import withAlert from "../HOC/withAlert";
+import { handelGet } from "../services/Services";
 
 const Users = (props) => {
   const navigate = useNavigate();
@@ -12,13 +12,10 @@ const Users = (props) => {
   const { Alert } = props;
 
   useEffect(() => {
-    axios
-      .get("https://jsonplaceholder.typicode.com/users")
-      .then((res) => {
-        setUsers(res.data);
-        setMainUsers(res.data);
-      })
-      .catch((err) => {});
+    handelGet("users").then((res) => {
+      setUsers(res.data);
+      setMainUsers(res.data);
+    });
   }, []);
 
   const handleDelete = async (itemId, username) => {
@@ -31,25 +28,22 @@ const Users = (props) => {
         true
       )
     ) {
-      axios
-        .delete(`https://jsonplaceholder.typicode.com/users/${itemId}`)
-        .then((res) => {
-          if (res.status === 200) {
-            const newusers = users.filter((u) => u.id !== itemId);
-            setUsers(newusers);
+      handleDelete("users", itemId).then((res) => {
+        if (res.status === 200) {
+          const newUsers = users.filter((u) => u.id !== itemId);
+          setUsers(newUsers);
 
-            Alert("عملیات با موفقیت انجام شد", "success", "");
-          } else {
-            Alert("عملیات با خطا مواجه شد", "error");
-          }
-        });
+          Alert("عملیات با موفقیت انجام شد", "success", "");
+        } else {
+          Alert("عملیات با خطا مواجه شد", "error");
+        }
+      });
     } else {
       Alert("عملیات لغو شد");
     }
   };
 
   const handleSearch = (e) => {
-    console.log(e.target.value);
     setUsers(
       mainUsers.filter(
         (u) => u.name.includes(e.target.value) || u.id === e.target.value

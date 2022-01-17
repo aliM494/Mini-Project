@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  handelGetUser,
-  handlAddUser,
-  handlEditUser,
-} from "../services/userServices";
+import { handelGetWithId, handelAdd, handelEdit } from "../services/Services";
 import style from "../style.module.css";
 
 const Adddata = () => {
@@ -27,19 +23,29 @@ const Adddata = () => {
     e.preventDefault();
 
     if (userId) {
-      handlEditUser(data);
+      handelEdit("users", data);
     } else {
-      handlAddUser(data, userId);
+      handelAdd("users", data, userId);
     }
   };
 
   useEffect(() => {
     if (userId) {
-      handelGetUser(userId).then((res) => {
-        setData(res);
+      handelGetWithId("users", userId).then((res) => {
+        setData({
+          name: res.data.name,
+          username: res.data.username,
+          email: res.data.email,
+          address: {
+            street: res.data.address.street,
+            suite: res.data.address.suite,
+            city: res.data.address.city,
+            zipcode: res.data.address.zipcode,
+          },
+        });
       });
     }
-  });
+  }, []);
 
   return (
     <div className={`${style.item_content} mt-5 p-4 container-fluid container`}>

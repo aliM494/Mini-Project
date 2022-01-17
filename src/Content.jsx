@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router";
 import { MainContext } from "./contexts/MainContext";
 import Gallery from "./gallery/Gallery";
 import Posts from "./posts/Posts";
+import ShowPost from "./posts/ShowPost";
 import style from "./style.module.css";
 import Todos from "./todos/Todos";
 import AddUser from "./users/AddUser";
@@ -31,6 +32,9 @@ const Content = () => {
       <Routes>
         <Route path="/user" element={<Users />} />
         <Route path="/post" element={<Posts />} />
+        <Route path="/post/show" element={<ShowPost />}>
+          <Route path=":postId" />
+        </Route>
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/todos" element={<Todos />} />
         <Route path="/user/add" element={<AddUser />}>
