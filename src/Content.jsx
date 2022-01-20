@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Route, Routes } from "react-router";
 import { MainContext } from "./contexts/MainContext";
 import Gallery from "./gallery/Gallery";
+import AddPost from "./posts/AddPost2";
 import Posts from "./posts/Posts";
 import ShowPost from "./posts/ShowPost";
 import style from "./style.module.css";
@@ -31,15 +32,20 @@ const Content = () => {
 
       <Routes>
         <Route path="/user" element={<Users />} />
-        <Route path="/post" element={<Posts />} />
-        <Route path="/post/show" element={<ShowPost />}>
-          <Route path=":postId" />
-        </Route>
-        <Route path="/gallery" element={<Gallery />} />
-        <Route path="/todos" element={<Todos />} />
         <Route path="/user/add" element={<AddUser />}>
           <Route path=":userId" />
         </Route>
+
+        <Route path="/post" element={<Posts />} />
+        <Route path="/posts/show" element={<ShowPost />}>
+          <Route path=":postId" />
+        </Route>
+        <Route path="/posts/add" element={<AddPost />}>
+          <Route path=":postId" />
+        </Route>
+
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/todos" element={<Todos />} />
         <Route path="*" element={<Users />} />
       </Routes>
     </div>

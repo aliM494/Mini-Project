@@ -73,10 +73,13 @@ const Posts = () => {
                 <td>
                   <i
                     className="fas fa-eye text-primary mx-2 pointer"
-                    onClick={() => navigate(`/post/show/${post.id}`)}
+                    onClick={() => navigate(`/posts/show/${post.id}`)}
                   ></i>
 
-                  <i className="fas fa-edit text-warning mx-2 pointer"></i>
+                  <i
+                    className="fas fa-edit text-warning mx-2 pointer"
+                    onClick={() => navigate(`/posts/add/${post.id}`)}
+                  ></i>
 
                   <i className="fas fa-trash text-danger mx-2 pointer"></i>
                 </td>
