@@ -19,3 +19,22 @@ export const reducer = (state, action) => {
       return state;
   }
 };
+
+export const userInit = {
+  user: { id: [], name: [] },
+};
+
+export const userReducer = (state, action) => {
+  switch (action.type) {
+    case "changeUsers":
+      return {
+        ...state,
+        user: {
+          id: [...state.user.id, action.userId],
+          id: [...state.user.name, action.userName],
+        },
+      };
+    default:
+      return state;
+  }
+};

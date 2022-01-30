@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Route, Routes } from "react-router";
 import { MainContext } from "./contexts/MainContext";
 import Gallery from "./gallery/Gallery";
-import AddPost from "./posts/AddPost2";
+import AddPost from "./posts/AddPost";
 import Posts from "./posts/Posts";
 import ShowPost from "./posts/ShowPost";
 import style from "./style.module.css";
